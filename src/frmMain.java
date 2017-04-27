@@ -26,9 +26,11 @@ public class frmMain extends javax.swing.JFrame {
     /**
      * Creates new form frmMain
      */
-    public frmMain() {
+    public frmMain(String nana) {
         initComponents();
         selectData();
+        txtNama.setText(nana);
+        
     }
 
     /**
@@ -41,6 +43,7 @@ public class frmMain extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jLabel4 = new javax.swing.JLabel();
         txtNO = new javax.swing.JTextField();
         txtNama = new javax.swing.JTextField();
@@ -84,6 +87,8 @@ public class frmMain extends javax.swing.JFrame {
         jDatePinjam1 = new com.toedter.calendar.JDateChooser();
         jLabel18 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        txtStatus = new javax.swing.JTextField();
+        btncari = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -102,6 +107,12 @@ public class frmMain extends javax.swing.JFrame {
         });
         getContentPane().add(txtNO);
         txtNO.setBounds(40, 230, 90, 30);
+
+        txtNama.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamaActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtNama);
         txtNama.setBounds(140, 230, 130, 30);
 
@@ -117,6 +128,7 @@ public class frmMain extends javax.swing.JFrame {
         getContentPane().add(jLabel7);
         jLabel7.setBounds(40, 260, 100, 20);
 
+        buttonGroup2.add(rdNovel);
         rdNovel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rdNovel.setForeground(new java.awt.Color(255, 255, 255));
         rdNovel.setText("NOVEL");
@@ -128,18 +140,21 @@ public class frmMain extends javax.swing.JFrame {
         getContentPane().add(rdNovel);
         rdNovel.setBounds(40, 280, 110, 23);
 
+        buttonGroup2.add(rdBio);
         rdBio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rdBio.setForeground(new java.awt.Color(255, 255, 255));
         rdBio.setText("BIOGRAFI");
         getContentPane().add(rdBio);
         rdBio.setBounds(40, 320, 110, 23);
 
+        buttonGroup2.add(rdKamus);
         rdKamus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rdKamus.setForeground(new java.awt.Color(255, 255, 255));
         rdKamus.setText("KAMUS");
         getContentPane().add(rdKamus);
         rdKamus.setBounds(160, 320, 110, 23);
 
+        buttonGroup2.add(rdEdu);
         rdEdu.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rdEdu.setForeground(new java.awt.Color(255, 255, 255));
         rdEdu.setText("EDUKASI");
@@ -187,10 +202,7 @@ public class frmMain extends javax.swing.JFrame {
 
         tb1Data.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "NO", "NAMA", "JENIS BUKU", "ALAMAT", "JUDUL BUKU", "TGLPINJAM", "TGLKEMBALI", "STATUS"
@@ -244,7 +256,7 @@ public class frmMain extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnClear);
-        btnClear.setBounds(840, 380, 90, 30);
+        btnClear.setBounds(840, 380, 80, 30);
 
         jbPrint.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbPrint.setText("PRINT");
@@ -361,7 +373,21 @@ public class frmMain extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(940, 380, 100, 30);
+        jButton1.setBounds(930, 380, 110, 30);
+
+        txtStatus.setText("cari status ");
+        getContentPane().add(txtStatus);
+        txtStatus.setBounds(930, 540, 110, 30);
+
+        btncari.setText("cari");
+        btncari.setToolTipText("");
+        btncari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncariActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btncari);
+        btncari.setBounds(970, 580, 49, 23);
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMAGE/FORM.png"))); // NOI18N
@@ -402,7 +428,7 @@ public class frmMain extends javax.swing.JFrame {
     private void tb1DataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb1DataMouseClicked
         // TODO add your handling code here:
         int baris = tb1Data.getSelectedRow();
-        if (baris !=1) {
+        if (baris !=-1) {
             txtNO1.setText(tb1Data.getValueAt(baris, 0).toString());
             txtNama1.setText(tb1Data.getValueAt(baris, 1).toString());
             if ("Novel".equals(tb1Data.getValueAt(baris, 2).toString())){
@@ -466,10 +492,10 @@ public class frmMain extends javax.swing.JFrame {
             String SQL = "INSERT INTO tb_pinjam VALUES ('"+txtNO.getText()+"', '"+txtNama.getText()+"', '"+jenis+"', '"+txtAlamat.getText()+"', '"+txtJudul.getText()+"', '"+tglpinjam+"', '"+tglkembali+"', '"+stat+"')";
             int status = KoneksiDB.execute(SQL);
             if (status == 1){
-                JOptionPane.showMessageDialog(this,"Data berhasil ditambahkan","sukses",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,"peminjaman berhasil ditambahkan","sukses",JOptionPane.INFORMATION_MESSAGE);
                  selectData();
             } else {
-                JOptionPane.showMessageDialog(this,"Data gagal ditambahkan","error",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"peminjaman gagal ditambahkan","error",JOptionPane.WARNING_MESSAGE);
             }
         }
         
@@ -484,6 +510,13 @@ public class frmMain extends javax.swing.JFrame {
         jDatePinjam1.setDate(null);
         jDateKembali1.setDate(null);
         txtAlamat1.setText("");
+        txtNama.setText("");
+        txtNO.setText("");
+        txtJudul.setText("");
+        buttonGroup2.clearSelection();
+        jDatePinjam.setDate(null);
+        jDateKembali.setDate(null);
+        txtAlamat.setText("");
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void txtNO1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNO1ActionPerformed
@@ -516,16 +549,25 @@ public class frmMain extends javax.swing.JFrame {
                 +"judul='"+txtJudul1.getText()+"',"
                 +"tglpinjam='"+tglpinjam+"',"
                 +"tglkembali='"+tglkembali+"',"
-                +"status='"+stat+"',"
-                +" WHERE no ='"+txtNO1.getText()+"'";
+                +"status='"+stat+"' "
+                + "WHERE no='"+txtNO1.getText()+"'";
          int update = KoneksiDB.execute(SQL);
             if (update == 1){
-                JOptionPane.showMessageDialog(this,"Data berhasil diupdate","sukses",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this,"buku berhasil dikembalikan","sukses",JOptionPane.INFORMATION_MESSAGE);
                  selectData();
             } else {
-                JOptionPane.showMessageDialog(this,"Data gagal diupdate","error",JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,"buku gagal dikembalikan","error",JOptionPane.WARNING_MESSAGE);
             }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btncariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncariActionPerformed
+        selectstatus();
+        
+    }//GEN-LAST:event_btncariActionPerformed
+
+    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
+       
+    }//GEN-LAST:event_txtNamaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -557,7 +599,7 @@ public class frmMain extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmMain().setVisible(true);
+                
             }
         });
     }
@@ -565,7 +607,9 @@ public class frmMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btncari;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private com.toedter.calendar.JDateChooser jDateKembali;
@@ -608,12 +652,48 @@ public class frmMain extends javax.swing.JFrame {
     private javax.swing.JTextField txtNO1;
     private javax.swing.JTextField txtNama;
     private javax.swing.JTextField txtNama1;
+    private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
 
     private void selectData() {
          String kolom[] = {"no","nama","jenis","alamat","judul","tglpinjam","tglkembali","status"};
        DefaultTableModel dtm = new DefaultTableModel(null,kolom);
        String SQL = "SELECT * FROM tb_pinjam";
+       ResultSet rs = KoneksiDB.executeQuery(SQL);
+       try{
+           while(rs.next()){
+               String no = rs.getString(1);
+               String nama= rs.getString(2);
+               String jenis = " ";
+               if("Novel".equals(rs.getString(3))){
+                   jenis = "Novel";
+               }else if ("Biografi".equals(rs.getString(3))){
+                   jenis = "Biografi";
+               }else if ("Edukasi".equals(rs.getString(3))){
+                   jenis = "Edukasi";
+               } else{
+                   jenis = "Kamus";
+               }
+               String alamat = rs.getString(4);
+               String judul = rs.getString(5);
+               String tglpinjam = rs.getString(6);
+               String tglkembali = rs.getString(7);
+               String status = rs.getString(8);
+              
+               String data[] = {no,nama,jenis,alamat,judul,tglpinjam,tglkembali,status};
+               dtm.addRow(data);
+           }
+           
+       }catch (SQLException ex){
+                   Logger.getLogger(frmMain.class.getName()).log(Level.SEVERE,null, ex);
+                   }
+       tb1Data.setModel(dtm);
+    }
+
+    private void selectstatus() {
+           String kolom[] = {"no","nama","jenis","alamat","judul","tglpinjam","tglkembali","status"};
+       DefaultTableModel dtm = new DefaultTableModel(null,kolom);
+       String SQL = "SELECT * FROM tb_pinjam WHERE status='"+txtStatus.getText()+"'";
        ResultSet rs = KoneksiDB.executeQuery(SQL);
        try{
            while(rs.next()){

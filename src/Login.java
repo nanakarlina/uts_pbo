@@ -18,9 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Login
-     */
+     
     public Login() {
         initComponents();
     }
@@ -105,8 +103,10 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
+     
         Connection connection;
         PreparedStatement ps;
+        
         try {
             connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/db_perpus?zeroDateTimeBehavior=convertToNull", "root", "");
             ps = connection.prepareStatement("SELECT * FROM tb_akun WHERE nama = ? AND password = ?");
@@ -114,7 +114,8 @@ public class Login extends javax.swing.JFrame {
             ps.setString(2, txtPass.getText());
             ResultSet result = ps.executeQuery();
             if (result.next()) {
-                new frmMain().show();
+                String nana = txtNama1.getText();
+                new frmMain(nana).show();
                 this.dispose();
             }
             else {
@@ -125,6 +126,9 @@ public class Login extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, "gagal");
         }
+        
+       
+        
     }//GEN-LAST:event_btnSignInActionPerformed
 
     /**
