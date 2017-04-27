@@ -12,7 +12,7 @@ package uts_pbo;
 public class file_koneksi {
 
     public static Object GetConnection() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of ethods, choose Tools | Templates.
     }
     
 }
